@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import { register } from "next/dist/next-devtools/userspace/pages/pages-dev-overlay-setup";
 import { useForm } from "react-hook-form";
 
@@ -10,9 +11,20 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm();
 
-  function handleRegisterFunc(data) {
+  const handleRegisterFunc = async(data) => {
     const { email, name, photo, password } = data;
 
+    const {data: res, error} = await authClient.signUp.email({
+      name: name,
+      email: email,
+      password: password,
+      image: photo,
+      callbackURL: "/",
+    })
+
+    console.log(res, error);
+    if(error) alert(error.message)
+    if(res) alert("Signup successful")
   }
 
   return (

@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import { register } from "next/dist/next-devtools/userspace/pages/pages-dev-overlay-setup";
 import { useForm } from "react-hook-form";
 
@@ -11,7 +12,14 @@ export default function LoginPage() {
   } = useForm();
 
   function handleLoginFunc(data) {
-    console.log(data);
+    const { data:res, error} = authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+      rememberMe: true,
+      callbackURL: "/",
+    })
+
+    console.log(res, error);
   }
 
 
